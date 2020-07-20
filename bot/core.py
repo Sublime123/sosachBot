@@ -4,6 +4,7 @@ import os
 import asyncio
 from threading import Thread
 import bot.messages as messages
+import random
 
 class Core:
     def __init__(self):
@@ -33,7 +34,13 @@ class Core:
         for event in dataPart:
             if (event['type'] == "message_new"):
                 if (event['object']['message']['text'] == '!pidor'):
-                    self.longPoll.sendMessage(event['object']['message']['peer_id'],'Вы все пидоры')
+                    #self.longPoll.sendMessage(event['object']['message']['peer_id'],'Вы все пидоры')
+                    response = self.longPoll.getMembers(event['object']['message']['peer_id'])
+                    luckyNum = random.randint(0, response["response"]["count"])
+                    text = "Пидор [id" + str(response["response"]["profiles"][luckyNum]["id"]) + "|" + \
+                        response["response"]["profiles"][luckyNum]["first_name"] + "]!"
+                    #print(text)
+                    self.longPoll.sendMessage(event['object']['message']['peer_id'],text)
     def requestLoop(self):
         while self.execute:
             if self.longPoll.initialized != True:

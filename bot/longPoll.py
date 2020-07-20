@@ -4,8 +4,10 @@ import random
 
 class LongPoll:
     def __init__(self,basicToken,groupId,debug=False,verbouse=False):
+        self.basicAddress = 'https://api.vk.com/method/'
         self.longpollApi = 'https://api.vk.com/method/groups.getLongPollServer'
         self.messageApi = 'https://api.vk.com/method/messages.send'
+        self.participiantApi = 'messages.getConversationMembers'
         self.groupId = groupId
         self.basicToken = basicToken
         self.LongpollServer = None
@@ -65,5 +67,10 @@ class LongPoll:
             'random_id':random.randint(1, 1000), 'access_token':self.basicToken, 'v':'5.123'})
         if self.debug == True:
             print(resMsgRes.text)
-    def getParticipiants(self,dialog):
-        pass
+    def getMembers(self,dialog):
+        resMembers = requests.post(self.basicAddress + self.participiantApi, data = {\
+            'peer_id':dialog, 'group_id':self.groupId, 'access_token':self.basicToken, 'v':'5.123'})
+        if self.debug == True:
+            print(resMembers.text)
+        json = resMembers.json()
+        return json

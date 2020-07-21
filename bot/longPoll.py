@@ -50,7 +50,10 @@ class LongPoll:
                     'ts':self.ts,'wait':self.waitDefalt})
             if (res.status_code == 200):
                 json = res.json()  
-                self.ts = json['ts']
+                try:
+                    self.ts = json['ts']
+                except:
+                    pass
                 failed = False
                 try: 
                     if (json['failed'] == 1):

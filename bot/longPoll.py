@@ -49,12 +49,12 @@ class LongPoll:
                     'act':'a_check','key':self.longPollToken,\
                     'ts':self.ts,'wait':self.waitDefalt})
             if (res.status_code == 200):
+                failed = False
                 json = res.json()  
                 try:
                     self.ts = json['ts']
                 except:
                     failed = True
-                failed = False
                 try: 
                     if (json['failed'] == 1):
                         failed = True

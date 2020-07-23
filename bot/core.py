@@ -1,5 +1,6 @@
 import bot.longPoll as longPoll
 import bot.settings as settings
+import bot.db as db
 import os
 import asyncio
 from threading import Thread
@@ -17,7 +18,7 @@ class Core:
         self.longPollThread = None
         self.execute = False
         self.work = True
-    
+        self.storage = db.Storage(self.settings.debug)
     def eventLoop(self):
         while self.work:
             self.handleData(self.longPoll.longpoolRes.get())
@@ -40,7 +41,24 @@ class Core:
                     text = "Пидор [id" + str(response["response"]["profiles"][luckyNum]["id"]) + "|" + \
                         response["response"]["profiles"][luckyNum]["first_name"] + "]!"
                     #print(text)
+                    print()
+                    self.storage.raiseCountOnUser(conferenceId=event['object']['message']['peer_id'],\
+                                                  userVkId=event['object']['message']['from_id'],\
+                                                  name=response["response"]["profiles"][luckyNum]["first_name"],\
+                                                  lastName=response["response"]["profiles"][luckyNum]["last_name"])
                     self.longPoll.sendMessage(event['object']['message']['peer_id'],text)
+                elif (event['object']['message']['text'] == '!stat'):
+                    conferenceId = event['object']['message']['peer_id']
+                    stat = self.storage.getConferenceStat(conferenceId)
+                    text = ""
+                    if (len(stat) != 0):
+                        text = "Пидоры конференции: \n"
+                        for person in stat:
+                            text += person['name'] + " пидор " + str(person['count']) + " раз\n"
+                    else:
+                        text = "Никто ещё не стал пидором."
+                    self.longPoll.sendMessage(event['object']['message']['peer_id'],text)
+                    
     def requestLoop(self):
         while self.execute:
             if self.longPoll.initialized != True:

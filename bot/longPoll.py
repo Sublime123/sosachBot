@@ -54,7 +54,8 @@ class LongPoll:
                 try:
                     self.ts = json['ts']
                 except:
-                    failed = True
+                    print(json)
+                    raise
                 try: 
                     if (json['failed'] == 1):
                         failed = True

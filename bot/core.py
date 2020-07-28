@@ -41,9 +41,8 @@ class Core:
                     text = "Пидор [id" + str(response["response"]["profiles"][luckyNum]["id"]) + "|" + \
                         response["response"]["profiles"][luckyNum]["first_name"] + "]!"
                     #print(text)
-                    print()
                     self.storage.raiseCountOnUser(conferenceId=event['object']['message']['peer_id'],\
-                                                  userVkId=event['object']['message']['from_id'],\
+                                                  userVkId=response["response"]["profiles"][luckyNum]["id"],\
                                                   name=response["response"]["profiles"][luckyNum]["first_name"],\
                                                   lastName=response["response"]["profiles"][luckyNum]["last_name"])
                     self.longPoll.sendMessage(event['object']['message']['peer_id'],text)

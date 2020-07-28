@@ -27,7 +27,7 @@ class Storage:
         q = self.session.query(User).filter_by(conferenceId=conferenceId).order_by(User.count.desc())
         res = []
         for user in q:
-            res.append({"name": user.name + user.secondName, "count":user.count})
+            res.append({"name": user.name + " " + user.secondName, "count":user.count})
         return res
     def raiseCountOnUser(self,conferenceId, userVkId, name, lastName):
         q = self.session.query(User).filter_by(conferenceId=conferenceId,vkId=userVkId)

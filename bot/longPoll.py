@@ -19,6 +19,13 @@ class LongPoll:
         self.initialized = False
         self.longpoolRes = Queue()
         self.longpoolResMax = 10
+    def updateInner(self):
+        for _ in range (0,4):
+            if self.initialized != True or self.needToReconnect == True:
+                self.getLongPoll()
+            else:
+                break
+        raise Exception("Attempt to init failed!")
     def getLongPoll(self):
         try:
             print(self.basicToken)
@@ -49,19 +56,22 @@ class LongPoll:
                     'act':'a_check','key':self.longPollToken,\
                     'ts':self.ts,'wait':self.waitDefalt})
             if (res.status_code == 200):
-                failed = False
+                failedSafe = False
                 json = res.json()  
                 try:
                     self.ts = json['ts']
-                except:
-                    print(json)
-                    raise
+                except:                    
+                    if self.debug:
+                        print(json)
+                    failedSafe = True
                 try: 
                     if (json['failed'] == 1):
-                        failed = True
+                        failedSafe = True
+                    if (json['failed'] == 2):
+                        self.needToReconnect = True
                 except:
                     pass
-                if (failed == False):
+                if (failedSafe == False):
                     self.longpoolRes.put(json['updates'])
             else:
                 raise Exception("Status code is incorrect")

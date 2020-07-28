@@ -34,20 +34,24 @@ class Core:
             print(dataPart)
         for event in dataPart:
             if (event['type'] == "message_new"):
-                if (event['object']['message']['text'] == '!pidor'):
-                    #self.longPoll.sendMessage(event['object']['message']['peer_id'],'Вы все пидоры')
-                    response = self.longPoll.getMembers(event['object']['message']['peer_id'])
-                    luckyNum = random.randint(0, response["response"]["count"])
+                messageText = event['object']['message']['text']
+                conferenceId = event['object']['message']['peer_id']
+                senderId = event['object']['message']['from_id']
+                if (messageText == '!pidor' or messageText == '!пидор'):
+                    #self.longPoll.sendMessage(conferenceId,'Вы все пидоры')
+                    response = self.longPoll.getMembers(conferenceId)
+                    countOfUsers = response["response"]["count"]
+                    luckyNum = random.randint(0, countOfUsers)
                     text = "Пидор [id" + str(response["response"]["profiles"][luckyNum]["id"]) + "|" + \
                         response["response"]["profiles"][luckyNum]["first_name"] + "]!"
                     #print(text)
-                    self.storage.raiseCountOnUser(conferenceId=event['object']['message']['peer_id'],\
+                    self.storage.raiseCountOnUser(conferenceId=conferenceId,\
                                                   userVkId=response["response"]["profiles"][luckyNum]["id"],\
                                                   name=response["response"]["profiles"][luckyNum]["first_name"],\
                                                   lastName=response["response"]["profiles"][luckyNum]["last_name"])
-                    self.longPoll.sendMessage(event['object']['message']['peer_id'],text)
-                elif (event['object']['message']['text'] == '!stat'):
-                    conferenceId = event['object']['message']['peer_id']
+                    self.longPoll.sendMessage(conferenceId,text)
+                elif (messageText == '!stat' or messageText == '!статистика' or messageText == '!стат'):
+                    conferenceId = conferenceId
                     stat = self.storage.getConferenceStat(conferenceId)
                     text = ""
                     if (len(stat) != 0):
@@ -56,7 +60,17 @@ class Core:
                             text += person['name'] + " пидор " + str(person['count']) + " раз\n"
                     else:
                         text = "Никто ещё не стал пидором."
-                    self.longPoll.sendMessage(event['object']['message']['peer_id'],text)
+                    self.longPoll.sendMessage(conferenceId,text)
+                elif (messageText == '!roulette' or messageText == '!рулетка'):
+                    if (random.randint(0, 1) == 0):
+                        shot = True
+                    else:
+                        shot = False
+                    if shot == True:
+                        text = '[id' + str(senderId) + '|Ты] ' +  'отстрелил себе башку, тупица!'
+                    else:
+                        text = 'Пронесло'
+                    self.longPoll.sendMessage(conferenceId,text)
                     
     def requestLoop(self):
         while self.execute:

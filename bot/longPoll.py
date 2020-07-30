@@ -8,6 +8,7 @@ class LongPoll:
         self.longpollApi = 'https://api.vk.com/method/groups.getLongPollServer'
         self.messageApi = 'https://api.vk.com/method/messages.send'
         self.participiantApi = 'messages.getConversationMembers'
+        self.usersApi = 'users.get'
         self.groupId = groupId
         self.basicToken = basicToken
         self.LongpollServer = None
@@ -21,7 +22,7 @@ class LongPoll:
         self.longpoolResMax = 10
     def updateInner(self):
         for _ in range (0,4):
-            if self.initialized != True or self.needToReconnect == True:
+            if (self.initialized != True) or (self.needToReconnect == True):
                 self.getLongPoll()
             else:
                 break
@@ -46,6 +47,7 @@ class LongPoll:
             self.longPollToken = ansJson["response"]["key"]
             self.logPollToken = ansJson["response"]["ts"]
             self.initialized = True
+            self.needToReconnect = False
         else:                
             if (self.debug == True):
                 print("Longpoll status: " + str(anwer.status_code) + "\n" )
@@ -88,3 +90,10 @@ class LongPoll:
             print(resMembers.text)
         json = resMembers.json()
         return json
+    def getUserName(self,userId):
+        resUser = requests.post(self.basicAddress + self.usersApi, data = {\
+            'user_ids':userId, 'name_case':"Nom", 'access_token':self.basicToken, 'v':'5.120'})
+        if self.debug == True:
+            print(resUser.text)
+        body = resUser.json()["response"][0]
+        return body["first_name"] , body["last_name"]

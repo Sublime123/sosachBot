@@ -1,5 +1,6 @@
 import bot.longPoll as longPoll
 import bot.settings as settings
+import bot.responder as responder
 import bot.db as db
 import os
 import asyncio
@@ -19,6 +20,7 @@ class Core:
         self.execute = False
         self.work = True
         self.storage = db.Storage(self.settings.debug)
+        self.responder = responder.Responder()
     def eventLoop(self):
         while self.work:
             self.handleData(self.longPoll.longpoolRes.get())
@@ -71,6 +73,16 @@ class Core:
                     else:
                         text = 'Пронесло'
                     self.longPoll.sendMessage(conferenceId,text)
+                elif (messageText == '!name' or messageText == '!имя'):
+                    senderName, senderSecondName = self.longPoll.getUserName(senderId)
+                    japNameRes = self.responder.GetJapaniseName(senderName)
+                    text = "Твоё японское имя: " + japNameRes[2] + "\n, " + japNameRes[1] +\
+                                             " " + japNameRes[0] 
+                    self.longPoll.sendMessage(conferenceId,text)
+                    
+                    
+                    
+                    
                     
     def requestLoop(self):
         while self.execute:

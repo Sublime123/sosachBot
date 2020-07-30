@@ -43,7 +43,7 @@ class Core:
                     #self.longPoll.sendMessage(conferenceId,'Вы все пидоры')
                     response = self.longPoll.getMembers(conferenceId)
                     countOfUsers = response["response"]["count"]
-                    luckyNum = random.randint(0, countOfUsers)
+                    luckyNum = random.randint(0, countOfUsers - 1)
                     text = "Пидор [id" + str(response["response"]["profiles"][luckyNum]["id"]) + "|" + \
                         response["response"]["profiles"][luckyNum]["first_name"] + "]!"
                     #print(text)

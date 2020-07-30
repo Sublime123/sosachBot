@@ -86,9 +86,6 @@ class Core:
                     
     def requestLoop(self):
         while self.execute:
-            if self.longPoll.initialized != True:
-                self.longPoll.getLongPoll()
-                if self.longPoll.initialized != True:
-                    break
+            self.longPoll.updateInner()
             self.longPoll.longPoll()
     

@@ -25,7 +25,7 @@ class LongPoll:
             if (self.initialized != True) or (self.needToReconnect == True):
                 self.getLongPoll()
             else:
-                break
+                return
         raise Exception("Attempt to init failed!")
     def getLongPoll(self):
         try:

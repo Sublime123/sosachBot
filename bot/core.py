@@ -52,6 +52,11 @@ class Core:
                                                   name=response["response"]["profiles"][luckyNum]["first_name"],\
                                                   lastName=response["response"]["profiles"][luckyNum]["last_name"])
                     self.longPoll.sendMessage(conferenceId,text)
+                elif (messageText == '!army' or messageText == '!армия'):
+                    resp = self.responder.GetArmyName()
+                    text = "Ваша кличка бойца Драм'н'баса:\n" + \
+                        resp[0] + " " + resp[1]
+                    self.longPoll.sendMessage(conferenceId,text)
                 elif (messageText == '!stat' or messageText == '!статистика' or messageText == '!стат'):
                     conferenceId = conferenceId
                     stat = self.storage.getConferenceStat(conferenceId)

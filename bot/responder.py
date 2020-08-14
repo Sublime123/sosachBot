@@ -1,3 +1,4 @@
+import random
 class Responder():
     def __init__(self):
         self.names = {'Александр': ('(защитник)', '守る' ,'Мамору'), \
@@ -49,6 +50,10 @@ class Responder():
               'Степан': ('(венец, венок, корона)','花輪ろ','Ханаваро'), \
               'Юрий': ('(созидатель)','やり手','Яритэ'), \
               'Ярослав': ('(яркая слава)','明る名','Акарумэй'),}
+        self.ArmyName = {'first':\
+            ['Сонный','Опасный','Суровый','Старый','Зашкварный','Отбитый','Тупой','Длинный','Простой','Боевой'], \
+                'second':\
+            ['Вазелин','Кирпич','Валенок','Интеллигент','Мамонт','Калич','Пёс','Салага','Чапала','Затуп']}
     def GetJapaniseName(self,name):
         jname = name
         jname_letters = ''
@@ -59,3 +64,13 @@ class Responder():
         #for l in name:
         #    if (l == '')
         return jname, jname_letters, jname
+    def GetArmyName(self):
+        name = ''
+        secondName = ''
+        firstSize = len(self.ArmyName['first'])
+        secondSize = len(self.ArmyName['second'])
+        luckyNumFirst = random.randint(0, firstSize - 1)
+        luckyNumSecond = random.randint(0, secondSize - 1)
+        name = self.ArmyName['first'][luckyNumFirst]
+        secondName = self.ArmyName['second'][luckyNumSecond]
+        return name, secondName

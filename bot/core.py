@@ -68,6 +68,9 @@ class Core:
                     else:
                         text = "Никто ещё не стал пидором."
                     self.longPoll.sendMessage(conferenceId,text)
+                elif (messageText == '!gachi'):
+                    text = self.responder.GetSlave();
+                    self.longPoll.sendMessage(conferenceId,text)
                 elif (messageText == '!roulette' or messageText == '!рулетка'):
                     if (random.randint(0, 1) == 0):
                         shot = True

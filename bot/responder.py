@@ -1,4 +1,30 @@
 import random
+from enum import Enum
+
+class RandomType(Enum):
+    s0 = 0
+    s1 = 1
+    s2 = 2
+    s3 = 3
+    s4 = 4
+    s5 = 5
+    s6 = 6
+    s7 = 7
+    s8 = 8
+    s9 = 9
+    dub = 11
+    trip = 111
+    quad = 1111
+    
+class RandomItem():
+    def GetItem(self,itemList):
+        if itemList['type'] == 'single':
+            return itemList[self.GetRand().value]
+    def GetRand(self):
+        number = random.randint(0, 10 - 1)
+        randomType = RandomType(number)
+        return randomType
+        
 class Responder():
     def __init__(self):
         self.names = {'Александр': ('(защитник)', '守る' ,'Мамору'), \
@@ -54,6 +80,20 @@ class Responder():
             ['Сонный','Опасный','Суровый','Старый','Зашкварный','Отбитый','Тупой','Длинный','Простой','Боевой'], \
                 'second':\
             ['Вазелин','Кирпич','Валенок','Интеллигент','Мамонт','Калич','Пёс','Салага','Чапала','Затуп']}
+        self.SlavePhraze = {'type' : 'single',
+                            0 : '♂JABRONI♂',
+                            1 : '♂FUCKING SLAVE♂',
+                            2 : '♂BOY NEXT DOOR♂',
+                            3 : '♂COLLEGE BOY♂',
+                            4 : '♂LEATHERMAN♂',
+                            5 : '♂PERFORMANCE ARTIST♂',
+                            6 : '♂THE SEMEN ARSONIST♂',
+                            7 : '♂DUNGEON MASTER♂',
+                            8 : '♂FULL MASTER♂',
+                            9 : '♂BOSS OF THIS GYM♂',
+                            'double' : '♂AAAAAAAAAAHHHHHHHHHH♂',
+                            'tripl' : 'после смерти попадешь прямо к ♂BILLY♂ в качалку',
+                            'quad' : '♂♂♂♂♂JACKOFFPOT♂♂♂♂♂}'}
     def GetJapaniseName(self,name):
         jname = name
         jname_letters = ''
@@ -74,3 +114,6 @@ class Responder():
         name = self.ArmyName['first'][luckyNumFirst]
         secondName = self.ArmyName['second'][luckyNumSecond]
         return name, secondName
+    def GetSlave(self):
+        rand = RandomItem()        
+        return rand.GetItem(self.SlavePhraze)
